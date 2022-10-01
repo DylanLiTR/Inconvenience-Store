@@ -5,8 +5,7 @@ using UnityEngine;
 public class FollowCamera : MonoBehaviour
 {
     [SerializeField] GameObject player;
-    [SerializeField] Transform leftWall;
-    [SerializeField] Transform rightWall;
+
     [SerializeField] float offsetSmoothing = 3;
     Vector3 playerPosition;
     Vector3 camPosition;
@@ -28,7 +27,7 @@ public class FollowCamera : MonoBehaviour
         playerPosition = new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z);
 
         camPosition = Vector3.Lerp(transform.position, playerPosition, offsetSmoothing * Time.deltaTime);
-        transform.position = new Vector3(Mathf.Clamp(camPosition.x, leftWall.position.x + camWidth, rightWall.position.x - camWidth), 
-                                         Mathf.Clamp(camPosition.y, -5f + camHeight, 25 - camHeight), camPosition.z);
+        transform.position = new Vector3(camPosition.x, 
+                                         Mathf.Clamp(camPosition.y, -5f + camHeight, 500), camPosition.z);
     }
 }
