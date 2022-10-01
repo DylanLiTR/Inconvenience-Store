@@ -1,2 +1,2 @@
 # Inconvenience-Store
- GI Jam "Far to close" Game
+ GI Jam "Far from close" Game
