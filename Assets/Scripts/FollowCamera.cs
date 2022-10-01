@@ -23,12 +23,12 @@ public class FollowCamera : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         playerPosition = new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z);
 
         camPosition = Vector3.Lerp(transform.position, playerPosition, offsetSmoothing * Time.deltaTime);
-        transform.position = new Vector3(Mathf.Clamp(camPosition.x, leftWall.position.x - camWidth, rightWall.position.x + camWidth), 
+        transform.position = new Vector3(Mathf.Clamp(camPosition.x, leftWall.position.x + camWidth, rightWall.position.x - camWidth), 
                                          Mathf.Clamp(camPosition.y, -5f + camHeight, 25 - camHeight), camPosition.z);
     }
 }
