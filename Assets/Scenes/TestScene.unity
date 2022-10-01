@@ -332,8 +332,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1509092064}
-  offset: 3
-  offsetSmoothing: 1
+  offsetSmoothing: 3
 --- !u!1 &1509092064
 GameObject:
   m_ObjectHideFlags: 0
