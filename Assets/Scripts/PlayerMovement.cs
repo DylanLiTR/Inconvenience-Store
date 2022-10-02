@@ -10,11 +10,12 @@ public class PlayerMovement : MonoBehaviour
 	[SerializeField] private InventoryUI inventoryUI;
 
    public CharacterController2D controller;
-   List<Customer> customerList;
+   List<Customer> customerList = new List<Customer>();
 
    public Text customerCount;
    public Animator animator;
 
+  
 
 
 	public float runSpeed = 40f;
@@ -68,13 +69,22 @@ public class PlayerMovement : MonoBehaviour
 			}
 		
 			float timeToComplete = 40;
-			customerList.Add(new Customer(custInventory, timeToComplete));
+			Customer new_customer = new Customer (custInventory, timeToComplete);
+			customerList.Add(new_customer);
+			
 		}
 		// Checking how many customers have been created (like a rudimentary orders UI)
-		int customerSize = customerList.Count;
+		string customer1 = "k";
+		if (customerList.Count > 0) {
+			
 
-		customerCount.text = customerSize.ToString();
-		*/
+		
+			foreach (Item item in customerList[0].inventory.GetItemList()) {
+				customer1 += item.GetType();
+			}
+		}
+		customerCount.text = customerList.Count.ToString() + customer1;
+
 
 		// Crouching if we need it, nothing for now
         /*if (Input.GetButtonDown("Crouch"))
@@ -164,19 +174,58 @@ public class PlayerMovement : MonoBehaviour
 				collision.gameObject.SetActive(false);
 				inventoryUI.SetInventory(inventory);
 
-				StartCoroutine(Respawn(collision,20));
-			}
-		}
-		// desk collision
-		// Want to go through each customer in order and remove the first item we find
-		// thats same as one of the iterms in the player's inventory
-		if (collision.gameObject.tag == "desk")
-		{
-			if (inventory.GetListSize() > 0) {
-				inventory.RemoveFirstItem();
-				inventoryUI.SetInventory(inventory);
-			}
-		}
+					StartCoroutine(Respawn(collision,20));
+                }
+            }
+			// desk collision
+			// Want to go through each customer in order and remove the first item we find
+			// thats same as one of the iterms in the player's inventory
+			if (collision.gameObject.tag == "desk")
+            {
+				if (customerList.Count > 0) {
+					int invenSize = inventory.GetListSize();
+					for (int i = 0; i < customerList.Count; ++i) {
+						Customer cust = (Customer)customerList[i];
+						int custInvenSize = cust.inventory.GetListSize();
+						for (int j= 0; j < inventory.GetListSize(); ++j) {
+							for (int k =0; k < cust.inventory.GetListSize(); ++k) {
+								if (inventory.getItem(j).GetType() == cust.inventory.getItem(k).GetType()) {
+									inventory.Removeat(j);
+									inventoryUI.SetInventory(inventory);
+									cust.inventory.Removeat(k);
+									k=Mathf.Max(0,k--);
+									custInvenSize=Mathf.Max(0,custInvenSize--);
+									j=Mathf.Max(0,j--);
+									invenSize=Mathf.Max(0,invenSize--);
+
+									UnityEngine.Debug.Log("k=" + k + " custInvenSize=" + custInvenSize + " j=" + j + " invenSize=" + invenSize);
+
+									if (cust.inventory.GetListSize() == 0) {
+										customerList.RemoveAt(i);
+										i=Mathf.Max(0,i--);
+										
+									}
+								}
+							}
+						}
+					}
+
+				/* foreach (Customer cust in customerList) {
+					foreach (Item item in inventory.GetItemList()) {
+						foreach (Item item2 in cust.inventory.GetItemList()) {
+							if (item == item2) {
+								inventory.RemoveItem(item);
+								cust.inventory.RemoveItem(item);
+								if (cust.inventory.GetListSize() == 0) {
+									customerList.Remove(cust);
+									customerSize--;
+								}
+							}
+						}
+					}
+				}*/
+				}
+            }
 
 		FindObjectOfType<AudioManager>().Play("Pickup");
 		UnityEngine.Debug.Log("pickup");
