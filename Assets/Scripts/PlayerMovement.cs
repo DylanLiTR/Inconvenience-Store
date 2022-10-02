@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class PlayerMovement : MonoBehaviour
 {
 	private Inventory inventory;
+	[SerializeField] private InventoryUI inventoryUI;
 
    public CharacterController2D controller;
    public int totalItems=0;
@@ -24,6 +25,11 @@ public class PlayerMovement : MonoBehaviour
 		TotalItems.text=totalItems.ToString();
 
 		inventory = new Inventory();
+		inventoryUI.SetInventory(inventory);
+
+		/* ItemWorld.SpawnItemWorld(new Vector3(10,10), new Item {itemType = Item.ItemType.apple, amount =1});
+		ItemWorld.SpawnItemWorld(new Vector3(-10,10), new Item {itemType = Item.ItemType.milk, amount =1});
+		ItemWorld.SpawnItemWorld(new Vector3(0,-10), new Item {itemType = Item.ItemType.spy, amount =1}); */
 	}
 
 	// Update is called once per frame
@@ -61,17 +67,75 @@ public class PlayerMovement : MonoBehaviour
 
 	private void OnTriggerEnter2D(Collider2D collision)
         {
+			// ketchup collision
             if (collision.gameObject.tag == "ketchup")
             {
-                if (totalItems < 3)
+                if (inventory.GetListSize() < 3)
                 {
-                    ketchup += 1;
-                    totalItems += 1;
+                    inventory.AddItem(new Item{ itemType=Item.ItemType.ketchup, amount=1 } );
                     collision.gameObject.SetActive(false);
-                    TotalItems.text=totalItems.ToString();
+					inventoryUI.SetInventory(inventory);
 
 					StartCoroutine(Respawn(collision,4));
                 }
             }
+			// sandwich collision
+			if (collision.gameObject.tag == "sandwich")
+            {
+                if (inventory.GetListSize() < 3)
+                {
+                    inventory.AddItem(new Item{ itemType=Item.ItemType.sandwich, amount=1 } );
+                    collision.gameObject.SetActive(false);
+					inventoryUI.SetInventory(inventory);
+
+					StartCoroutine(Respawn(collision,8));
+                }
+            }
+			// milk collision
+			if (collision.gameObject.tag == "milk")
+            {
+                if (inventory.GetListSize() < 3)
+                {
+                    inventory.AddItem(new Item{ itemType=Item.ItemType.milk, amount=1 } );
+                    collision.gameObject.SetActive(false);
+					inventoryUI.SetInventory(inventory);
+
+					StartCoroutine(Respawn(collision,12));
+                }
+            }
+			// apple collision
+			if (collision.gameObject.tag == "apple")
+            {
+                if (inventory.GetListSize() < 3)
+                {
+                    inventory.AddItem(new Item{ itemType=Item.ItemType.apple, amount=1 } );
+                    collision.gameObject.SetActive(false);
+					inventoryUI.SetInventory(inventory);
+
+					StartCoroutine(Respawn(collision,16));
+                }
+            }
+			// spy collision
+			if (collision.gameObject.tag == "spy")
+            {
+                if (inventory.GetListSize() < 3)
+                {
+                    inventory.AddItem(new Item{ itemType=Item.ItemType.spy, amount=1 } );
+                    collision.gameObject.SetActive(false);
+					inventoryUI.SetInventory(inventory);
+
+					StartCoroutine(Respawn(collision,20));
+                }
+            }
+			// desk collision
+			if (collision.gameObject.tag == "desk")
+            {
+				foreach (Item item in inventory.GetItemList()) {
+					// Drop all items for now
+					inventory.RemoveItem(item);
+					inventoryUI.SetInventory(inventory);
+				}
+            }
+
         }
 }
