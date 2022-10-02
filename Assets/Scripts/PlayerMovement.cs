@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
 	private Inventory inventory;
 
    public CharacterController2D controller;
+   public Animator animator;
    public int totalItems=0;
    public int ketchup = 0;
 
@@ -31,9 +32,11 @@ public class PlayerMovement : MonoBehaviour
 
 		horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
 
+		animator.SetFloat("Speed", Mathf.Abs(horizontalMove));
 		if (Input.GetButtonDown("Jump"))
 		{
 			jump = true;
+			animator.SetBool("Jumping", true);
 		}
 
         /*if (Input.GetButtonDown("Crouch"))
@@ -46,6 +49,11 @@ public class PlayerMovement : MonoBehaviour
 */
         
     }
+
+	public void OnLanding ()
+	{
+		animator.SetBool("Jumping", false);
+	}
 
 	void FixedUpdate ()
 	{
