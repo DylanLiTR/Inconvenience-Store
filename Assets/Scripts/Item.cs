@@ -13,6 +13,9 @@ public class Item
     }
     public ItemType itemType;
 
+    public string GetType() {
+        return itemType.ToString();
+    }
 
     public Sprite GetSprite() {
         switch (itemType) {

@@ -10,10 +10,12 @@ public class PlayerMovement : MonoBehaviour
 	[SerializeField] private InventoryUI inventoryUI;
 
    public CharacterController2D controller;
-   List<Customer> customerList;
+   List<Customer> customerList = new List<Customer>();
 
    public Text customerCount;
    public Animator animator;
+
+   private int customerSize = 0;
 
 
 
@@ -67,12 +69,21 @@ public class PlayerMovement : MonoBehaviour
 			}
 		
 			float timeToComplete = 40;
-			customerList.Add(new Customer(custInventory, timeToComplete));
+			Customer new_customer = new Customer (custInventory, timeToComplete);
+			customerList.Add(new_customer);
+			customerSize++;
 		}
 		// Checking how many customers have been created (like a rudimentary orders UI)
-		int customerSize = customerList.Count;
+		string customer1 = "k";
+		if (customerSize > 0) {
+			customerSize = customerList.Count;
 
-		customerCount.text = customerSize.ToString();
+		
+			foreach (Item item in customerList[0].inventory.GetItemList()) {
+				customer1 += item.GetType();
+			}
+		}
+		customerCount.text = customerSize.ToString() + customer1;
 
 
 		// Crouching if we need it, nothing for now
@@ -171,8 +182,27 @@ public class PlayerMovement : MonoBehaviour
 			// thats same as one of the iterms in the player's inventory
 			if (collision.gameObject.tag == "desk")
             {
-				if (customerList.Count > 0) {
-				foreach (Customer cust in customerList) {
+				if (customerSize > 0) {
+					int invenSize = inventory.GetListSize();
+					for (int i = 0; i < customerSize; ++i) {
+						Customer cust = (Customer)customerList[i];
+						int custInvenSize = cust.inventory.GetListSize();
+						for (int j= 0; j < invenSize; ++j) {
+							for (int k =0; k < custInvenSize; ++k) {
+								if (inventory.getItem(j).GetType() == cust.inventory.getItem(k).GetType()) {
+									inventory.Removeat(j);
+									cust.inventory.Removeat(k);
+
+									if (cust.inventory.GetListSize() == 0) {
+										customerList.RemoveAt(i);
+										customerSize--;
+									}
+								}
+							}
+						}
+					}
+
+				/* foreach (Customer cust in customerList) {
 					foreach (Item item in inventory.GetItemList()) {
 						foreach (Item item2 in cust.inventory.GetItemList()) {
 							if (item == item2) {
@@ -180,11 +210,12 @@ public class PlayerMovement : MonoBehaviour
 								cust.inventory.RemoveItem(item);
 								if (cust.inventory.GetListSize() == 0) {
 									customerList.Remove(cust);
+									customerSize--;
 								}
 							}
 						}
 					}
-				}
+				}*/
 				}
             }
 

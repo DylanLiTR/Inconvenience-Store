@@ -35,4 +35,12 @@ public class Inventory
         itemList.Remove(item);
     }
 
+    public Item getItem(int i) {
+        return itemList[i];
+    }
+
+    public void Removeat(int i) {
+        itemList.RemoveAt(i);
+    }
+
 }
