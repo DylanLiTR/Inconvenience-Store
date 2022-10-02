@@ -15,8 +15,7 @@ public class PlayerMovement : MonoBehaviour
    public Text customerCount;
    public Animator animator;
 
-   private int customerSize = 0;
-
+  
 
 
 	public float runSpeed = 40f;
@@ -71,19 +70,19 @@ public class PlayerMovement : MonoBehaviour
 			float timeToComplete = 40;
 			Customer new_customer = new Customer (custInventory, timeToComplete);
 			customerList.Add(new_customer);
-			customerSize++;
+			
 		}
 		// Checking how many customers have been created (like a rudimentary orders UI)
 		string customer1 = "k";
-		if (customerSize > 0) {
-			customerSize = customerList.Count;
+		if (customerList.Count > 0) {
+			
 
 		
 			foreach (Item item in customerList[0].inventory.GetItemList()) {
 				customer1 += item.GetType();
 			}
 		}
-		customerCount.text = customerSize.ToString() + customer1;
+		customerCount.text = customerList.Count.ToString() + customer1;
 
 
 		// Crouching if we need it, nothing for now
@@ -182,20 +181,28 @@ public class PlayerMovement : MonoBehaviour
 			// thats same as one of the iterms in the player's inventory
 			if (collision.gameObject.tag == "desk")
             {
-				if (customerSize > 0) {
+				if (customerList.Count > 0) {
 					int invenSize = inventory.GetListSize();
-					for (int i = 0; i < customerSize; ++i) {
+					for (int i = 0; i < customerList.Count; ++i) {
 						Customer cust = (Customer)customerList[i];
 						int custInvenSize = cust.inventory.GetListSize();
-						for (int j= 0; j < invenSize; ++j) {
-							for (int k =0; k < custInvenSize; ++k) {
+						for (int j= 0; j < inventory.GetListSize(); ++j) {
+							for (int k =0; k < cust.inventory.GetListSize(); ++k) {
 								if (inventory.getItem(j).GetType() == cust.inventory.getItem(k).GetType()) {
 									inventory.Removeat(j);
+									inventoryUI.SetInventory(inventory);
 									cust.inventory.Removeat(k);
+									k=Mathf.Max(0,k--);
+									custInvenSize=Mathf.Max(0,custInvenSize--);
+									j=Mathf.Max(0,j--);
+									invenSize=Mathf.Max(0,invenSize--);
+
+									UnityEngine.Debug.Log("k=" + k + " custInvenSize=" + custInvenSize + " j=" + j + " invenSize=" + invenSize);
 
 									if (cust.inventory.GetListSize() == 0) {
 										customerList.RemoveAt(i);
-										customerSize--;
+										i=Mathf.Max(0,i--);
+										
 									}
 								}
 							}
