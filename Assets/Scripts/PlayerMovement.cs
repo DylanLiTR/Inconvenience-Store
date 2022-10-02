@@ -17,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
 
 	public float runSpeed = 40f;
 
+	const int maxItems = 3;
 	float horizontalMove = 0f;
 	bool jump = false;
 	bool crouch = false;
@@ -70,7 +71,7 @@ public class PlayerMovement : MonoBehaviour
 			// ketchup collision
             if (collision.gameObject.tag == "ketchup")
             {
-                if (inventory.GetListSize() < 3)
+                if (inventory.GetListSize() < maxItems)
                 {
                     inventory.AddItem(new Item{ itemType=Item.ItemType.ketchup, amount=1 } );
                     collision.gameObject.SetActive(false);
@@ -82,7 +83,7 @@ public class PlayerMovement : MonoBehaviour
 			// sandwich collision
 			if (collision.gameObject.tag == "sandwich")
             {
-                if (inventory.GetListSize() < 3)
+                if (inventory.GetListSize() < maxItems)
                 {
                     inventory.AddItem(new Item{ itemType=Item.ItemType.sandwich, amount=1 } );
                     collision.gameObject.SetActive(false);
@@ -94,7 +95,7 @@ public class PlayerMovement : MonoBehaviour
 			// milk collision
 			if (collision.gameObject.tag == "milk")
             {
-                if (inventory.GetListSize() < 3)
+                if (inventory.GetListSize() < maxItems)
                 {
                     inventory.AddItem(new Item{ itemType=Item.ItemType.milk, amount=1 } );
                     collision.gameObject.SetActive(false);
@@ -106,7 +107,7 @@ public class PlayerMovement : MonoBehaviour
 			// apple collision
 			if (collision.gameObject.tag == "apple")
             {
-                if (inventory.GetListSize() < 3)
+                if (inventory.GetListSize() < maxItems)
                 {
                     inventory.AddItem(new Item{ itemType=Item.ItemType.apple, amount=1 } );
                     collision.gameObject.SetActive(false);
@@ -118,7 +119,7 @@ public class PlayerMovement : MonoBehaviour
 			// spy collision
 			if (collision.gameObject.tag == "spy")
             {
-                if (inventory.GetListSize() < 3)
+                if (inventory.GetListSize() < maxItems)
                 {
                     inventory.AddItem(new Item{ itemType=Item.ItemType.spy, amount=1 } );
                     collision.gameObject.SetActive(false);
@@ -127,8 +128,8 @@ public class PlayerMovement : MonoBehaviour
 					StartCoroutine(Respawn(collision,20));
                 }
             }
-			// desk collision
-			if (collision.gameObject.tag == "desk")
+			// trash collision
+			if (collision.gameObject.tag == "trash")
             {
 				foreach (Item item in inventory.GetItemList()) {
 					// Drop all items for now
@@ -136,6 +137,12 @@ public class PlayerMovement : MonoBehaviour
 					inventoryUI.SetInventory(inventory);
 				}
             }
-
+			// desk collision
+			if (collision.gameObject.tag == "desk")
+			{
+				itemlist = new List<Item>();
+				itemlist = inventory.GetItemList();
+				depositItems(itemlist, order);
+			}
         }
 }
