@@ -12,7 +12,6 @@ public class Item
         apple
     }
     public ItemType itemType;
-    public int amount;
 
 
     public Sprite GetSprite() {

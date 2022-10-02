@@ -10,10 +10,10 @@ public class PlayerMovement : MonoBehaviour
 	[SerializeField] private InventoryUI inventoryUI;
 
    public CharacterController2D controller;
-   public int totalItems=0;
-   public int ketchup = 0;
+   List<Customer> customerList;
 
-   public Text TotalItems;
+   public Text customerCount;
+
 
 	public float runSpeed = 40f;
 
@@ -22,10 +22,11 @@ public class PlayerMovement : MonoBehaviour
 	bool crouch = false;
 	
 	void Start() {
-		TotalItems.text=totalItems.ToString();
 
 		inventory = new Inventory();
 		inventoryUI.SetInventory(inventory);
+
+		
 
 		/* ItemWorld.SpawnItemWorld(new Vector3(10,10), new Item {itemType = Item.ItemType.apple, amount =1});
 		ItemWorld.SpawnItemWorld(new Vector3(-10,10), new Item {itemType = Item.ItemType.milk, amount =1});
@@ -34,14 +35,43 @@ public class PlayerMovement : MonoBehaviour
 
 	// Update is called once per frame
 	void Update () {
-
+		
 		horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
 
 		if (Input.GetButtonDown("Jump"))
 		{
 			jump = true;
 		}
+		// Creating a customer with a probability of 1 every 20 sec
+		// getting error: object reference not set to an instanceo of an object
+		// i.e. custInventory is not an instance of Inventory i.e. not initialized
+		if (Random.value < Time.deltaTime/20) {
+			Inventory custInventory = new Inventory();
+			for (int i = 0; i < 3; ++i) {
+				float order = Random.value;
+				if (order < 0.3) {
+					custInventory.AddItem(new Item {itemType = Item.ItemType.spy});
+				} else if (order < 0.6) {
+					custInventory.AddItem(new Item {itemType = Item.ItemType.apple});
+				} else if (order < 0.9) {
+					custInventory.AddItem(new Item {itemType = Item.ItemType.sandwich});
+				} else if (order < 0.95) {
+					custInventory.AddItem(new Item {itemType = Item.ItemType.milk});
+				} else {
+					custInventory.AddItem(new Item {itemType = Item.ItemType.ketchup});
+				}
+			}
+		
+			float timeToComplete = 40;
+			customerList.Add(new Customer(custInventory, timeToComplete));
+		}
+		// Checking how many customers have been created (like a rudimentary orders UI)
+		int customerSize = customerList.Count;
 
+		customerCount.text = customerSize.ToString();
+
+
+		// Crouching if we need it, nothing for now
         /*if (Input.GetButtonDown("Crouch"))
 		{
 			crouch = true;
@@ -65,14 +95,14 @@ public class PlayerMovement : MonoBehaviour
 		collision.gameObject.SetActive(true);
 	}
 
-	private void OnTriggerEnter2D(Collider2D collision)
+	void OnTriggerEnter2D(Collider2D collision)
         {
 			// ketchup collision
             if (collision.gameObject.tag == "ketchup")
             {
                 if (inventory.GetListSize() < 3)
                 {
-                    inventory.AddItem(new Item{ itemType=Item.ItemType.ketchup, amount=1 } );
+                    inventory.AddItem(new Item{ itemType=Item.ItemType.ketchup} );
                     collision.gameObject.SetActive(false);
 					inventoryUI.SetInventory(inventory);
 
@@ -84,7 +114,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (inventory.GetListSize() < 3)
                 {
-                    inventory.AddItem(new Item{ itemType=Item.ItemType.sandwich, amount=1 } );
+                    inventory.AddItem(new Item{ itemType=Item.ItemType.sandwich} );
                     collision.gameObject.SetActive(false);
 					inventoryUI.SetInventory(inventory);
 
@@ -96,7 +126,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (inventory.GetListSize() < 3)
                 {
-                    inventory.AddItem(new Item{ itemType=Item.ItemType.milk, amount=1 } );
+                    inventory.AddItem(new Item{ itemType=Item.ItemType.milk} );
                     collision.gameObject.SetActive(false);
 					inventoryUI.SetInventory(inventory);
 
@@ -108,7 +138,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (inventory.GetListSize() < 3)
                 {
-                    inventory.AddItem(new Item{ itemType=Item.ItemType.apple, amount=1 } );
+                    inventory.AddItem(new Item{ itemType=Item.ItemType.apple} );
                     collision.gameObject.SetActive(false);
 					inventoryUI.SetInventory(inventory);
 
@@ -120,7 +150,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (inventory.GetListSize() < 3)
                 {
-                    inventory.AddItem(new Item{ itemType=Item.ItemType.spy, amount=1 } );
+                    inventory.AddItem(new Item{ itemType=Item.ItemType.spy} );
                     collision.gameObject.SetActive(false);
 					inventoryUI.SetInventory(inventory);
 
@@ -128,12 +158,24 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
 			// desk collision
+			// Want to go through each customer in order and remove the first item we find
+			// thats same as one of the iterms in the player's inventory
 			if (collision.gameObject.tag == "desk")
             {
-				foreach (Item item in inventory.GetItemList()) {
-					// Drop all items for now
-					inventory.RemoveItem(item);
-					inventoryUI.SetInventory(inventory);
+				if (customerList.Count > 0) {
+				foreach (Customer cust in customerList) {
+					foreach (Item item in inventory.GetItemList()) {
+						foreach (Item item2 in cust.inventory.GetItemList()) {
+							if (item == item2) {
+								inventory.RemoveItem(item);
+								cust.inventory.RemoveItem(item);
+								if (cust.inventory.GetListSize() == 0) {
+									customerList.Remove(cust);
+								}
+							}
+						}
+					}
+				}
 				}
             }
 

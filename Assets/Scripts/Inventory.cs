@@ -5,7 +5,7 @@ using UnityEngine;
 public class Inventory
 {
     private List<Item> itemList;
-    private int numberOfItems = 0;
+    
     public Inventory() {
         itemList = new List<Item>();
 
@@ -17,7 +17,6 @@ public class Inventory
 
     public void AddItem(Item item) {
         itemList.Add(item);
-        numberOfItems++;
     }
 
     public List<Item> GetItemList() {
@@ -25,11 +24,15 @@ public class Inventory
     }
 
     public int GetListSize() {
-        return numberOfItems;
+        return itemList.Count;
+    }
+
+    public void RemoveFirstItem() {
+        itemList.RemoveAt(0);
     }
 
     public void RemoveItem(Item item) {
         itemList.Remove(item);
-        numberOfItems--;
     }
+
 }
