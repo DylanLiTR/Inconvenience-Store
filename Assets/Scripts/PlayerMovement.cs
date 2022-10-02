@@ -97,7 +97,9 @@ public class PlayerMovement : MonoBehaviour
 	{
 		// Move our character
 		controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jump);
-		jump = false;
+		if (jump == true && controller.isGrounded() == false) {
+			jump = false;
+		}
 	}
 
 	IEnumerator Respawn (Collider2D collision, float time) {
