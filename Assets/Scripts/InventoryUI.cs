@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour
 {
+    [SerializeField] int cellHeight;
     private Inventory inventory;
     private Transform itemSlotContainer;
     private Transform itemSlotTemplate;
@@ -21,22 +22,23 @@ public class InventoryUI : MonoBehaviour
     }
 
     private void RefreshInventoryItems() {
-        foreach (Transform child in itemSlotContainer) {
-            if (child == itemSlotTemplate) continue;
-            Destroy(child.gameObject);
+        if (itemSlotContainer != null) {
+            foreach (Transform child in itemSlotContainer) {
+                if (child == itemSlotTemplate) continue;
+                Destroy(child.gameObject);
+            }
         }
         int x = 0;
-        int y = -25;
-        float itemSlotCellSize = 30f;
+        int y = 0;
         foreach (Item item in inventory.GetItemList()) {
             
             RectTransform itemSlotRectTransform = Instantiate(itemSlotTemplate, itemSlotContainer).GetComponent<RectTransform>();
             itemSlotRectTransform.gameObject.SetActive(true);
-            itemSlotRectTransform.anchoredPosition = new Vector2(x, y + itemSlotCellSize);
+            itemSlotRectTransform.anchoredPosition = new Vector2(x, y + cellHeight);
             Image image = itemSlotRectTransform.Find("image").GetComponent<Image>();
             image.sprite = item.GetSprite();
 
-            y-=60;
+            y -= cellHeight;
         }
     }
 }
