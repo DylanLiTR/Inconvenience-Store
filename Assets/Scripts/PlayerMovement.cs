@@ -13,6 +13,8 @@ public class PlayerMovement : MonoBehaviour
    List<Customer> customerList;
 
    public Text customerCount;
+   public Animator animator;
+
 
 
 	public float runSpeed = 40f;
@@ -38,9 +40,11 @@ public class PlayerMovement : MonoBehaviour
 		
 		horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
 
+		animator.SetFloat("Speed", Mathf.Abs(horizontalMove));
 		if (Input.GetButtonDown("Jump"))
 		{
 			jump = true;
+			animator.SetBool("Jumping", true);
 		}
 		// Creating a customer with a probability of 1 every 20 sec
 		// getting error: object reference not set to an instanceo of an object
@@ -82,6 +86,11 @@ public class PlayerMovement : MonoBehaviour
 */
         
     }
+
+	public void OnLanding ()
+	{
+		animator.SetBool("Jumping", false);
+	}
 
 	void FixedUpdate ()
 	{
