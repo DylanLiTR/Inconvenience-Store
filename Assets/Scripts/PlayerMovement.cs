@@ -225,6 +225,13 @@ public class PlayerMovement : MonoBehaviour
 				}*/
 				}
             }
+			// trash collision
+			if (collision.gameObject.tag == "trash")
+			{
+				for (int i = 0; i < 3, ++i) {
+					inventory.RemoveFirstItem();
+				}
+			}
 
         }
 }

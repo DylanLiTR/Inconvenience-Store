@@ -28,7 +28,9 @@ public class Inventory
     }
 
     public void RemoveFirstItem() {
-        itemList.RemoveAt(0);
+        if (itemList.GetListSize() > 0) {
+            itemList.RemoveAt(0);
+        }
     }
 
     public void RemoveItem(Item item) {
