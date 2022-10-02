@@ -50,7 +50,7 @@ public class PlayerMovement : MonoBehaviour
 		// Creating a customer with a probability of 1 every 20 sec
 		// getting error: object reference not set to an instanceo of an object
 		// i.e. custInventory is not an instance of Inventory i.e. not initialized
-		/*
+		
 		if (Random.value < Time.deltaTime/20) {
 			Inventory custInventory = new Inventory();
 			for (int i = 0; i < 3; ++i) {
@@ -74,16 +74,16 @@ public class PlayerMovement : MonoBehaviour
 			
 		}
 		// Checking how many customers have been created (like a rudimentary orders UI)
-		string customer1 = "k";
+		string customer1 = " Orders\n";
 		if (customerList.Count > 0) {
 			
 
 		
 			foreach (Item item in customerList[0].inventory.GetItemList()) {
-				customer1 += item.GetType();
+				customer1 += item.GetType() + "\n";
 			}
 		}
-		customerCount.text = customerList.Count.ToString() + customer1;
+		customerCount.text = customerList.Count.ToString() + customer1 + "\n";
 
 
 		// Crouching if we need it, nothing for now
@@ -227,8 +227,13 @@ public class PlayerMovement : MonoBehaviour
 				}
             }
 
+			if (collision.gameObject.tag=="trash") {
+				for (int i = 0; i < 3; ++i) {
+					inventory.RemoveFirstItem();
+				} inventoryUI.SetInventory(inventory);
+			}
+
 		FindObjectOfType<AudioManager>().Play("Pickup");
-		UnityEngine.Debug.Log("pickup");
 	}
 }
 
