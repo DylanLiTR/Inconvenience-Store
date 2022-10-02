@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
+	private Inventory inventory;
+
    public CharacterController2D controller;
    public int totalItems=0;
    public int ketchup = 0;
@@ -20,6 +22,8 @@ public class PlayerMovement : MonoBehaviour
 	
 	void Start() {
 		TotalItems.text=totalItems.ToString();
+
+		inventory = new Inventory();
 	}
 
 	// Update is called once per frame
