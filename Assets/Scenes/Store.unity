@@ -1540,7 +1540,7 @@ MonoBehaviour:
   inventoryUI: {fileID: 490096887}
   controller: {fileID: 1111008629}
   customerCount: {fileID: 891594133}
-  animator: {fileID: 0}
+  animator: {fileID: 2065515525}
   runSpeed: 120
 --- !u!58 &1111008627
 CircleCollider2D:
@@ -2390,6 +2390,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2065515523}
   - component: {fileID: 2065515524}
+  - component: {fileID: 2065515525}
   m_Layer: 0
   m_Name: Model
   m_TagString: Untagged
@@ -2464,6 +2465,26 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &2065515525
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2065515522}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 987486415a9764ae8936fd460b8286f9, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2107401781
 GameObject:
   m_ObjectHideFlags: 0

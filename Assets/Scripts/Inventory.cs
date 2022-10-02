@@ -28,11 +28,21 @@ public class Inventory
     }
 
     public void RemoveFirstItem() {
-        itemList.RemoveAt(0);
+        if (itemList.Count > 0) {
+            itemList.RemoveAt(0);
+        }
     }
 
     public void RemoveItem(Item item) {
         itemList.Remove(item);
+    }
+
+    public Item getItem(int i) {
+        return itemList[i];
+    }
+
+    public void Removeat(int i) {
+        itemList.RemoveAt(i);
     }
 
 }
