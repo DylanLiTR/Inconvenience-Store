@@ -1,5 +1,5 @@
 # Inconvenience-Store
-Created for GI Jam 2020; Theme: "Far from close"  
+Created for GI Jam 2022; Theme: "Far from close"  
 Created by Dylan Li, Julianna So, Ida Yoon, Calvin Melanson, Pranay Nagpal
 
 Inconvenience Store is a platforming game where you have to fulfill customer orders as fast as you can before time runs out!
